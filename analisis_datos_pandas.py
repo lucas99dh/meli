@@ -61,3 +61,21 @@ plt.show()
 city_percentage = (city_counts / city_counts.sum()) * 100
 print("Porcentaje de items por ciudad:")
 print(city_percentage)
+
+city_counts = df["seller_address"].value_counts()
+# ciudades con al menos 6 items
+valid_cities = city_counts[city_counts >= 6].index  
+df_filtered = df[df["seller_address"].isin(valid_cities)]
+# calculo promedio
+avg_price_by_city = df_filtered.groupby("seller_address")["price"].mean().sort_values(ascending=False)
+print("Precio promedio de los ítems por ciudad (de mayor a menor):")
+print(avg_price_by_city)
+
+plt.figure(figsize=(12, 6))
+sns.barplot(x=avg_price_by_city.index, y=avg_price_by_city.values, palette="magma")
+plt.title(f"Promedio de precio por cidudad")
+plt.xlabel("Ciudad")
+plt.ylabel("Precio promedio (ARS)")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
